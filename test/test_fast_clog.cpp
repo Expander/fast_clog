@@ -36,7 +36,10 @@ void test_fast_clog()
 {
    const double eps = std::numeric_limits<double>::epsilon();
    const std::complex<double> numbers[] = {
+      {-1.0,  0.0},
+      {-1.0, -0.0},
       { 1.0,  0.0},
+      { 1.0, -0.0},
       { 0.0,  1.0},
       { 2.0,  0.0},
       { 0.0,  2.0},
