@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-static double _Complex fast_clog_(double _Complex z)
+static double _Complex fast_clog_c99(double _Complex z)
 {
    const double rz = creal(z);
    const double iz = cimag(z);
@@ -13,7 +13,6 @@ static double _Complex fast_clog_(double _Complex z)
 
 void fast_clog(double re, double im, double* out_re, double* out_im)
 {
-   const double _Complex res = fast_clog_(re + I*im);
-   *out_re = creal(res);
-   *out_im = cimag(res);
+   *out_re = 0.5*log(re*re + im*im);
+   *out_im = atan2(im, re);
 }
