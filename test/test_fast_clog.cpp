@@ -32,6 +32,15 @@ std::complex<double> fast_clog_c(const std::complex<double>& z)
 }
 
 
+std::complex<double> fast_clog_f(const std::complex<double>& z)
+{
+   const double re = std::real(z), im = std::imag(z);
+   double out_re, out_im;
+   fast_clog_(&re, &im, &out_re, &out_im);
+   return { out_re, out_im };
+}
+
+
 void test_fast_clog()
 {
    const double eps = std::numeric_limits<double>::epsilon();
@@ -49,10 +58,12 @@ void test_fast_clog()
    };
 
    for (const auto& z: numbers) {
-      CHECK_EQ(fast_clog_c( z), std::log( z), eps);
-      CHECK_EQ(fast_clog_c(-z), std::log(-z), eps);
       CHECK_EQ(fast_clog(   z), std::log( z), eps);
       CHECK_EQ(fast_clog(  -z), std::log(-z), eps);
+      CHECK_EQ(fast_clog_c( z), std::log( z), eps);
+      CHECK_EQ(fast_clog_c(-z), std::log(-z), eps);
+      CHECK_EQ(fast_clog_f( z), std::log( z), eps);
+      CHECK_EQ(fast_clog_f(-z), std::log(-z), eps);
    }
 }
 

@@ -21,6 +21,15 @@ std::complex<double> fast_clog_c(const std::complex<double>& z)
 }
 
 
+std::complex<double> fast_clog_f(const std::complex<double>& z)
+{
+   const double re = std::real(z), im = std::imag(z);
+   double out_re, out_im;
+   fast_clog_(&re, &im, &out_re, &out_im);
+   return { out_re, out_im };
+}
+
+
 using Sample_t = std::vector<std::complex<double> >;
 
 
@@ -65,16 +74,19 @@ void test_bench()
 
    const auto cpp = [](const std::complex<double>& z) { return fast_clog(z); };
    const auto c   = [](const std::complex<double>& z) { return fast_clog_c(z); };
+   const auto f   = [](const std::complex<double>& z) { return fast_clog_f(z); };
    const auto stl = [](const std::complex<double>& z) { return std::log(z); };
 
    const auto time_cpp = bench_fn(cpp, sample);
    const auto time_c   = bench_fn(c  , sample);
+   const auto time_f   = bench_fn(f  , sample);
    const auto time_stl = bench_fn(stl , sample);
 
    std::cout << "Average run-time for complex logarithm in ms:\n"
-             << "STL       (C++): " << time_stl << '\n'
-             << "fast_clog (C++): " << time_cpp << '\n'
-             << "fast_clog (C  ): " << time_c << '\n';
+             << "STL       (C++    ): " << time_stl << '\n'
+             << "fast_clog (C++    ): " << time_cpp << '\n'
+             << "fast_clog (C      ): " << time_c << '\n'
+             << "fast_clog (FORTRAN): " << time_f << '\n';
 }
 
 
