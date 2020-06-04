@@ -1,0 +1,11 @@
+#include <complex.h>
+#include <math.h>
+
+
+double _Complex fast_clog_c99(double _Complex z)
+{
+   const double rz = creal(z);
+   const double iz = cimag(z);
+
+   return 0.5*log(rz*rz + iz*iz) + I*atan2(iz, rz);
+}
