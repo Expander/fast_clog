@@ -11,9 +11,9 @@ static double _Complex fast_clog_(double _Complex z)
 }
 
 
-void fast_clog(double re, double im, double* res_re, double* res_im)
+void fast_clog(double re, double im, double* out_re, double* out_im)
 {
    const double _Complex res = fast_clog_(re + I*im);
-   *res_re = creal(res);
-   *res_im = cimag(res);
+   *out_re = creal(res);
+   *out_im = cimag(res);
 }
