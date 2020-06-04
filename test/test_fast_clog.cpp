@@ -44,6 +44,7 @@ std::complex<double> fast_clog_f(const std::complex<double>& z)
 void test_fast_clog()
 {
    const double eps = std::numeric_limits<double>::epsilon();
+   const double eul = 2.7182818284590452354;
    const std::complex<double> numbers[] = {
       {-1.0,  0.0},
       {-1.0, -0.0},
@@ -54,16 +55,20 @@ void test_fast_clog()
       { 0.0,  2.0},
       { 1.0,  1.0},
       { 2.0,  1.0},
-      { 1.0,  2.0}
+      { 1.0,  2.0},
+      { eul,  0.0}
    };
 
    for (const auto& z: numbers) {
-      CHECK_EQ(fast_clog(   z), std::log( z), eps);
-      CHECK_EQ(fast_clog(  -z), std::log(-z), eps);
-      CHECK_EQ(fast_clog_c( z), std::log( z), eps);
-      CHECK_EQ(fast_clog_c(-z), std::log(-z), eps);
-      CHECK_EQ(fast_clog_f( z), std::log( z), eps);
-      CHECK_EQ(fast_clog_f(-z), std::log(-z), eps);
+      CHECK_EQ(fast_clog(  z), std::log(z), eps);
+      CHECK_EQ(fast_clog_c(z), std::log(z), eps);
+      CHECK_EQ(fast_clog_f(z), std::log(z), eps);
+   }
+   for (auto z: numbers) {
+      z = -z;
+      CHECK_EQ(fast_clog(  z), std::log(z), eps);
+      CHECK_EQ(fast_clog_c(z), std::log(z), eps);
+      CHECK_EQ(fast_clog_f(z), std::log(z), eps);
    }
 }
 
