@@ -80,7 +80,7 @@ double bench_fn(F f, const Sample_t& sample)
 
 void test_bench()
 {
-   const auto sample = make_sample(-5.0, 5.0, 1000);
+   const auto sample = make_sample(-5.0, 5.0, 5000);
 
    const auto cpp = [](const std::complex<double>& z) { return fast_clog(z); };
    const auto c   = [](const std::complex<double>& z) { return fast_clog_c(z); };
@@ -95,11 +95,11 @@ void test_bench()
    const auto time_fm  = bench_fn(fm , sample);
 
    std::cout << "Average run-time for complex logarithm in ms:\n"
-             << "STL       (C++    ): " << time_stl << '\n'
+             << "log       (C++ STL): " << time_stl << '\n'
+             << "log       (FORTRAN): " << time_fm << '\n'
              << "fast_clog (C++    ): " << time_cpp << '\n'
              << "fast_clog (C      ): " << time_c << '\n'
-             << "log       (FORTRAN): " << time_f << '\n'
-             << "fast_clog (FORTRAN): " << time_fm << '\n';
+             << "fast_clog (FORTRAN): " << time_f << '\n';
 }
 
 
