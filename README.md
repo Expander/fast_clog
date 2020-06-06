@@ -34,13 +34,14 @@ function from the C++ STL with more performant implementations
 contained in this package (compiler: clang++ 11, compiler flags:
 `-Ofast -ffast-math`, CPU: i7-5600U):
 
-| Function                          | run-time in ms |
-|-----------------------------------|----------------|
-| `std::log(std::complex<double>&)` | 5.6e-05        |
-| `log(double complex)`             | 6.0e-05        |
-| `fast_clog` (C++)                 | 3.7e-05        |
-| `fast_clog` (C)                   | 3.9e-05        |
-| `fast_clog` (FORTRAN)             | 4.2e-05        |
+| Function                                      | run-time in ms |
+|-----------------------------------------------|----------------|
+| `std::log(const std::complex<double>&)` (C++) | 5.6e-05        |
+| `fast_clog` (C++)                             | 3.7e-05        |
+| `fast_clog` (C)                               | 3.9e-05        |
+|                                               |                |
+| `log(double complex)` (FORTRAN)               | 6.0e-05        |
+| `fast_clog` (FORTRAN)                         | 4.2e-05        |
 
 
 License: CC0
