@@ -1,4 +1,5 @@
 add_library(fast_clog
+  clog.f90
   fast_clog.c
   fast_clog.c99
   fast_clog.f90

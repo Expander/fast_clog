@@ -1,6 +1,7 @@
+#include "clog.h"
 #include "fast_clog.h"
 #include "fast_clog.hpp"
-#include <iostream>
+#include <cstdio>
 #include <limits>
 #include <complex>
 
@@ -8,20 +9,38 @@
 unsigned errors = 0;
 
 
-bool is_equal(const std::complex<double>& a, const std::complex<double>& b, double eps)
+bool is_equal(double a, double b, double eps)
 {
-   return std::real(a - b) <= eps && std::imag(a - b) <= eps;
+   return std::abs(a - b) <= eps;
 }
 
 
 #define CHECK_EQ(lhs,rhs,eps)                                           \
    do {                                                                 \
-      if (!is_equal(lhs, rhs, eps)) {                                   \
-         std::cerr << "FAILED test in line " << __LINE__                \
-                   << ": lhs (" << lhs << ") != rhs (" << rhs << ")" << std::endl; \
+      const auto rl = std::real(lhs), il = std::imag(lhs);              \
+      const auto rr = std::real(rhs), ir = std::imag(rhs);              \
+      if (!is_equal(rl, rr, eps)) {                                     \
+         printf("FAILED test in real part in line %d: "                 \
+                "lhs (%.16f) != rhs (%.16f)\n",                         \
+                __LINE__, rl, rr);                                      \
+         errors++;                                                      \
+      }                                                                 \
+      if (!is_equal(il, ir, eps)) {                                     \
+         printf("FAILED test in imag part in line %d: "                 \
+                "lhs (%.16f) != rhs (%.16f)\n",                         \
+                __LINE__, il, ir);                                      \
          errors++;                                                      \
       }                                                                 \
    } while (0)
+
+
+std::complex<double> clog_f(const std::complex<double>& z)
+{
+   const double re = std::real(z), im = std::imag(z);
+   double out_re, out_im;
+   clog_(&re, &im, &out_re, &out_im);
+   return { out_re, out_im };
+}
 
 
 std::complex<double> fast_clog_c(const std::complex<double>& z)
@@ -62,13 +81,13 @@ void test_fast_clog()
    for (const auto& z: numbers) {
       CHECK_EQ(fast_clog(  z), std::log(z), eps);
       CHECK_EQ(fast_clog_c(z), std::log(z), eps);
-      CHECK_EQ(fast_clog_f(z), std::log(z), eps);
+      CHECK_EQ(fast_clog_f(z), clog_f(z)  , eps);
    }
    for (auto z: numbers) {
       z = -z;
       CHECK_EQ(fast_clog(  z), std::log(z), eps);
       CHECK_EQ(fast_clog_c(z), std::log(z), eps);
-      CHECK_EQ(fast_clog_f(z), std::log(z), eps);
+      CHECK_EQ(fast_clog_f(z), clog_f(z)  , eps);
    }
 }
 
